@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load url from future %}
+
+<h3>{% trans "Simulation Overview" %}</h3>
+
+<div class="status detail">
+  <h4>{% trans "Information" %}</h4>
+  <hr class="header_rule">
+  <dl class="dl-horizontal">
+    <dt>{% trans "Name" %}</dt>
+    <dd>{{ instance.name }}</dd>
+    <dt>{% trans "ID" %}</dt>
+    <dd>{{ instance.id }}</dd>
+    <dt>{% trans "Public IP" %}</dt>
+    <dd>{{ instance.ip }}</dd>
+  </dl>
+
+  <h4>{% trans "Referenecs" %}</h4>
+  <hr class="header_rule">
+  <dl class="dl-horizontal">
+    <dt>{% trans "OSv Dashboard" %}</dt>
+    <dd><a target="_blank" href="http://{{ instance.ip }}:8000/">Dashboard</a></dd>
+    <dt>{% trans "Nova Instance " %}</dt>
+    <dd>
+        {% url instance.instance_url instance.instance_id as instance_url %}
+        <a href="{{ instance_url }}">{{ instance.name }}</a>
+    </dt>
+  </dl>
+</div>

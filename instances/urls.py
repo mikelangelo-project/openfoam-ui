@@ -12,5 +12,6 @@ urlpatterns = patterns(
     url(r'^(?P<instance_id>[^/]+)/$',
         views.DetailView.as_view(), name='detail'),
     url(INSTANCES % 'console', 'console', name='console'),
+    url(INSTANCES % 'download', 'download', name='download'),
 )
 

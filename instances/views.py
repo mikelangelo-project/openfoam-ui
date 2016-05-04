@@ -2,6 +2,7 @@ from collections import OrderedDict
 import logging
 
 from django import http
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions, tables, views, forms, tabs, workflows
@@ -14,6 +15,8 @@ from openstack_dashboard.dashboards.ofcloud.instances \
 from openstack_dashboard.dashboards.ofcloud.instances.tables import InstancesTable
 from openstack_dashboard.dashboards.ofcloud.instances.utils import get_instance_log
 
+import requests
+
 LOG = logging.getLogger(__name__)
 
 
@@ -23,8 +26,6 @@ class IndexView(tables.DataTableView):
 
     def get_data(self):
         instances = utils.get_instances(self)
-        print "HEEEJ"
-        print instances
         return instances
 
 class DetailView(tabs.TabView):
@@ -69,3 +70,15 @@ def console(request, instance_id):
         except Exception:
             exceptions.handle(request, ignore=True)
     return http.HttpResponse(data.encode('utf-8'), content_type='text/plain')
+
+
+def download(request, instance_id):
+    try:
+        r = requests.get(getattr(settings, 'OFCLOUD_API_URL', None) + '/instances/%s/download' % instance_id)
+
+        response = http.HttpResponse(r.content, content_type='application/x-gzip')
+        response['Content-Disposition'] = r.headers['Content-Disposition']
+
+        return response
+    except:
+        exceptions.handle(request, ignore=True)

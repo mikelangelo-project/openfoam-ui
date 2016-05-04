@@ -74,7 +74,7 @@ class InputDataAction(workflows.Action):
             label=_('Object container name'),
             required=True,
             max_length=50,
-            initial='inputs',
+            initial='mike-foam',
             help_text=_('Object container name'))
 
     input_data_object = forms.ChoiceField(
@@ -92,7 +92,7 @@ class InputDataAction(workflows.Action):
                 request, context, *args, **kwargs)
 
     def populate_input_data_object_choices(self, request, context):
-        return utils.objects_field_data(request, "inputs")
+        return utils.objects_field_data(request, "mike-foam")
 
 
 class InputData(workflows.Step):

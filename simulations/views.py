@@ -23,9 +23,6 @@ from openstack_dashboard.dashboards.ofcloud.instances.tables import InstancesTab
 from openstack_dashboard.dashboards.ofcloud.simulations import utils
 from openstack_dashboard.dashboards.ofcloud.simulations.workflows import AddSimulation
 
-from openstack_dashboard.dashboards.ofcloud.simulations \
-        import tabs as ofcloud_tabs
-
 LOG = logging.getLogger(__name__)
 
 

@@ -1,12 +1,13 @@
 import traceback, logging, json
 
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
 
 import requests
 
-ofcloud_url = 'http://10.211.55.101:8000'
+ofcloud_url = getattr(settings, 'OFCLOUD_API_URL', None)
 
 LOG = logging.getLogger(__name__)
 

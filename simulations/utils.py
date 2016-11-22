@@ -16,11 +16,12 @@ LOG = logging.getLogger(__name__)
 
 
 class Simulation:
-    def __init__(self, id, simulation_name, image, flavor, container_name, input_data_object):
+    def __init__(self, id, simulation_name, image, flavor, solver, container_name, input_data_object):
         self.id = id
         self.simulation_name = simulation_name
         self.image = image
         self.flavor = flavor
+        self.solver = solver
         self.container_name = container_name
         self.input_data_object = input_data_object
 
@@ -36,6 +37,7 @@ def getSimulations(self):
                 sim['simulation_name'],
                 sim['image'],
                 sim['flavor'],
+                sim.get('solver', ''),
                 sim['container_name'],
                 sim['input_data_object']))
 
@@ -52,6 +54,7 @@ def addSimulation(self, request, context):
         simulation_name = context.get('simulation_name')
         image = context.get('image')
         flavor = context.get('flavor')
+        solver = context.get('solver')
         container_name = context.get('container_name')
         input_data_object = context.get('input_data_object')
         cases = context.get('cases')
@@ -60,6 +63,7 @@ def addSimulation(self, request, context):
             'simulation_name': simulation_name,
             'image': image,
             'flavor': flavor,
+            'solver': solver,
             'container_name': container_name,
             'input_data_object': input_data_object,
             'cases': cases

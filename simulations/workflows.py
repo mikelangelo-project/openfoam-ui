@@ -14,6 +14,11 @@ class SetAddSimulationDetailsAction(workflows.Action):
         max_length=200,
         help_text=_('Name'))
 
+    solver = forms.ChoiceField(
+        label=_('Solver'),
+        required=True,
+        help_text=_('OpenFOAM solver'))
+
     image = forms.CharField(
         label=_('Image'),
         required=True,
@@ -50,16 +55,32 @@ class SetAddSimulationDetailsAction(workflows.Action):
     def populate_flavor_choices(self, request, context):
         return instance_utils.flavor_field_data(request, False)
 
+    @memoized.memoized_method
+    def _get_solver(self, solver_id):
+        solver = None
+        return solver
+
+    def populate_solver_choices(self, request, context):
+        return [('', _("select"))] + \
+               [("openfoam.pimplefoam", _("pimpleFoam")),
+                ("openfoam.pisofoam", _("pisoFoam")),
+                ("openfoam.poroussimplefoam", _("poroussimpleFoam")),
+                ("openfoam.potentialfoam", _("potentialFoam")),
+                ("openfoam.rhoporoussimplefoam", _("rhoporoussimpleFoam")),
+                ("openfoam.rhosimplefoam", _("rhosimpleFoam")),
+                ("openfoam.simplefoam", _("simpleFoam"))]
+
 
 class SetAddPSimulationDetails(workflows.Step):
     action_class = SetAddSimulationDetailsAction
-    contributes = ('simulation_name', 'image', 'flavor', 'container_name', 'input_data_object')
+    contributes = ('simulation_name', 'image', 'flavor', 'solver', 'container_name', 'input_data_object')
 
     def contribute(self, data, context):
         if data:
             context['simulation_name'] = data.get('simulation_name', '')
             context['image'] = data.get('image', '')
             context['flavor'] = data.get('flavor', '')
+            context['solver'] = data.get('solver', '')
 
         return context
 
@@ -69,7 +90,7 @@ class InputDataAction(workflows.Action):
         label=_('Object container name'),
         required=True,
         max_length=50,
-        initial='mike-foam',
+        initial='mikelangelo-cases',
         help_text=_('Object container name'))
 
     input_data_object = forms.ChoiceField(
@@ -87,7 +108,7 @@ class InputDataAction(workflows.Action):
             request, context, *args, **kwargs)
 
     def populate_input_data_object_choices(self, request, context):
-        return utils.objects_field_data(request, "mike-foam")
+        return utils.objects_field_data(request, "mikelangelo-cases")
 
 
 class InputData(workflows.Step):

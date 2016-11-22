@@ -40,6 +40,10 @@ class SimulationTable(tables.DataTable):
         link='horizon:ofcloud:simulations:detail',
         verbose_name=_('Name')
     )
+    solver = tables.Column(
+        'solver',
+        verbose_name=_('Solver')
+    )
     image = tables.Column(
         'image',
         verbose_name=_('Image')

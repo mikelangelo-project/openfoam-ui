@@ -1,21 +1,16 @@
-from collections import OrderedDict
 import logging
 
+import requests
 from django import http
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from horizon import exceptions, tables, views, forms, tabs, workflows
-
-from openstack_dashboard import api
-from openstack_dashboard.dashboards.ofcloud.instances import utils
-
+from horizon import exceptions, tables, tabs
 from openstack_dashboard.dashboards.ofcloud.instances \
-        import tabs as ofcloud_tabs
+    import tabs as ofcloud_tabs
+from openstack_dashboard.dashboards.ofcloud.instances import utils
 from openstack_dashboard.dashboards.ofcloud.instances.tables import InstancesTable
 from openstack_dashboard.dashboards.ofcloud.instances.utils import get_instance_log
-
-import requests
 
 LOG = logging.getLogger(__name__)
 
@@ -27,6 +22,7 @@ class IndexView(tables.DataTableView):
     def get_data(self):
         instances = utils.get_instances(self)
         return instances
+
 
 class DetailView(tabs.TabView):
     tab_group_class = ofcloud_tabs.DetailTabs

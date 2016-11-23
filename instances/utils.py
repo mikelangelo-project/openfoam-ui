@@ -1,11 +1,10 @@
-import traceback, logging, json
+import logging
 
+import requests
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
-
-import requests
 
 ofcloud_url = getattr(settings, 'OFCLOUD_API_URL', None)
 
@@ -51,16 +50,17 @@ def get_instance(self, instance_id):
         instance = r.json()
 
         return Instance(
-                        instance['id'],
-                        instance['name'],
-                        instance['config'],
-                        instance['ip'],
-                        instance['instance_id'],
-                        instance['grafana_url'],
-                        instance['download_case_url'])
+            instance['id'],
+            instance['name'],
+            instance['config'],
+            instance['ip'],
+            instance['instance_id'],
+            instance['grafana_url'],
+            instance['download_case_url'])
     except:
         exceptions.handle(self.request, _('Unable to retrieve details for instance %s' % instance_id))
         return []
+
 
 def get_instance_log(request, instance_id, length):
     try:
@@ -76,4 +76,3 @@ def get_instance_log(request, instance_id, length):
     except:
         exceptions.handle(request, _('Unable to retrieve the log for instance %s' % instance_id))
         return ""
-

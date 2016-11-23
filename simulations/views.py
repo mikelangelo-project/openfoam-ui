@@ -10,17 +10,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from collections import OrderedDict
 import logging
+from collections import OrderedDict
 
-from django.utils.translation import ugettext_lazy as _
-
-from horizon import exceptions, tables, views, forms, tabs, workflows
-
+from horizon import exceptions, tables, workflows
 from openstack_dashboard import api
-from openstack_dashboard.dashboards.ofcloud.simulations.tables import SimulationTable
 from openstack_dashboard.dashboards.ofcloud.instances.tables import InstancesTable
 from openstack_dashboard.dashboards.ofcloud.simulations import utils
+from openstack_dashboard.dashboards.ofcloud.simulations.tables import SimulationTable
 from openstack_dashboard.dashboards.ofcloud.simulations.workflows import AddSimulation
 
 LOG = logging.getLogger(__name__)
@@ -49,7 +46,7 @@ class SimulationsIndexView(tables.DataTableView):
                 else:
                     # If the flavor_id is not in full_flavors list,
                     # get it via nova api.
-                    sumulation.full_flavor = api.nova.flavor_get(
+                    simulation.full_flavor = api.nova.flavor_get(
                         self.request, flavor_id)
             except Exception:
                 msg = ('Unable to retrieve flavor "%s" for simulation "%s".'
@@ -75,12 +72,3 @@ class AddSimulationView(workflows.WorkflowView):
     def get_initial(self):
         initial = super(AddSimulationView, self).get_initial()
         return initial
-
-
-
-# class IndexView(views.APIView):
-    # # A very simple class-based view...
-
-    # def get_data(self, request, context, *args, **kwargs):
-        # # Add data to the context here...
-        # return context

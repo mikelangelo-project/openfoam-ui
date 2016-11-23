@@ -1,12 +1,7 @@
-from django.template.defaultfilters import filesizeformat  # noqa
-from django.utils.text import normalize_newlines  # noqa
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ungettext_lazy
-from django.views.decorators.debug import sensitive_variables  # noqa
 
-from horizon.utils import memoized
 from horizon import workflows, forms, exceptions
-
+from horizon.utils import memoized
 from openstack_dashboard.dashboards.ofcloud.simulations import utils
 from openstack_dashboard.dashboards.project.instances \
     import utils as instance_utils
@@ -14,20 +9,20 @@ from openstack_dashboard.dashboards.project.instances \
 
 class SetAddSimulationDetailsAction(workflows.Action):
     simulation_name = forms.CharField(
-            label=_('Name'),
-            required=True,
-            max_length=200,
-            help_text=_('Name'))
+        label=_('Name'),
+        required=True,
+        max_length=200,
+        help_text=_('Name'))
 
     image = forms.CharField(
-            label=_('Image'),
-            required=True,
-            max_length=100,
-            help_text=_('Image'))
+        label=_('Image'),
+        required=True,
+        max_length=100,
+        help_text=_('Image'))
 
     flavor = forms.ChoiceField(
-            label=_('Flavor'),
-            help_text=_('Flavor'))
+        label=_('Flavor'),
+        help_text=_('Flavor'))
 
     class Meta:
         name = _('Details')
@@ -37,7 +32,7 @@ class SetAddSimulationDetailsAction(workflows.Action):
         self.context = context
 
         super(SetAddSimulationDetailsAction, self).__init__(
-                request, context, *args, **kwargs)
+            request, context, *args, **kwargs)
 
     @memoized.memoized_method
     def _get_flavor(self, flavor_id):
@@ -71,15 +66,15 @@ class SetAddPSimulationDetails(workflows.Step):
 
 class InputDataAction(workflows.Action):
     container_name = forms.CharField(
-            label=_('Object container name'),
-            required=True,
-            max_length=50,
-            initial='mike-foam',
-            help_text=_('Object container name'))
+        label=_('Object container name'),
+        required=True,
+        max_length=50,
+        initial='mike-foam',
+        help_text=_('Object container name'))
 
     input_data_object = forms.ChoiceField(
-            label=_('Input data'),
-            help_text=_('Input data'))
+        label=_('Input data'),
+        help_text=_('Input data'))
 
     class Meta:
         name = _('Input Data')
@@ -89,7 +84,7 @@ class InputDataAction(workflows.Action):
         self.context = context
 
         super(InputDataAction, self).__init__(
-                request, context, *args, **kwargs)
+            request, context, *args, **kwargs)
 
     def populate_input_data_object_choices(self, request, context):
         return utils.objects_field_data(request, "mike-foam")
@@ -125,7 +120,7 @@ class CustomisationAction(workflows.Action):
         self.context = context
 
         super(CustomisationAction, self).__init__(
-                request, context, *args, **kwargs)
+            request, context, *args, **kwargs)
 
 
 class Customisation(workflows.Step):
@@ -148,9 +143,9 @@ class AddSimulation(workflows.Workflow):
     success_url = 'horizon:ofcloud:simulations:index'
     failure_url = 'horizon:ofcloud:simulations:index'
     default_steps = (
-            SetAddPSimulationDetails,
-            InputData,
-            Customisation)
+        SetAddPSimulationDetails,
+        InputData,
+        Customisation)
 
     def format_status_message(self, message):
         return message % self.context.get('simulation_name', 'unknown simulation')

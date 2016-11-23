@@ -14,4 +14,3 @@ urlpatterns = patterns(
     url(INSTANCES % 'console', 'console', name='console'),
     url(INSTANCES % 'download', 'download', name='download'),
 )
-

@@ -1,17 +1,14 @@
-import traceback, logging, json
+import logging
+import traceback
 
+import boto
+import boto.s3.connection
+import requests
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
-from openstack_dashboard.api import swift
 from openstack_dashboard.dashboards.ofcloud.instances.utils import Instance
-
-import requests
-
-import boto
-import boto.s3.connection
-
 
 ofcloud_url = getattr(settings, 'OFCLOUD_API_URL', None)
 
@@ -47,6 +44,7 @@ def getSimulations(self):
         exceptions.handle(self.request, _('Unable to get simulations'))
         return []
 
+
 # request - horizon environment settings
 # context - user inputs from form
 def addSimulation(self, request, context):
@@ -58,14 +56,14 @@ def addSimulation(self, request, context):
         input_data_object = context.get('input_data_object')
         cases = context.get('cases')
 
-        payload = { 
-                'simulation_name': simulation_name,
-                'image': image,
-                'flavor': flavor,
-                'container_name': container_name,
-                'input_data_object': input_data_object,
-                'cases': cases
-                }
+        payload = {
+            'simulation_name': simulation_name,
+            'image': image,
+            'flavor': flavor,
+            'container_name': container_name,
+            'input_data_object': input_data_object,
+            'cases': cases
+        }
 
         requests.post(ofcloud_url + "/simulations/", json=payload)
 
@@ -84,7 +82,7 @@ def delete_simulation(self, id):
     except:
         print traceback.format_exc()
         exceptions.handle(self.request,
-                _('Unable to delete simulationm'))
+                          _('Unable to delete simulationm'))
 
         return False
 
@@ -99,12 +97,12 @@ def object_list(request, container_name):
     """Utility method to retrieve a list of objects from the given container."""
     try:
         conn = boto.connect_s3(
-                aws_access_key_id = settings.S3_ACCESS_KEY_ID,
-                aws_secret_access_key = settings.S3_SECRET_ACCESS_KEY,
-                host = settings.S3_HOST,
-                port = settings.S3_PORT,
-                calling_format = boto.s3.connection.OrdinaryCallingFormat(),
-                )
+            aws_access_key_id=settings.S3_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.S3_SECRET_ACCESS_KEY,
+            host=settings.S3_HOST,
+            port=settings.S3_PORT,
+            calling_format=boto.s3.connection.OrdinaryCallingFormat(),
+        )
 
         bucket = conn.get_bucket(container_name)
 
@@ -116,11 +114,12 @@ def object_list(request, container_name):
 
         return objects
 
-#        return swift.swift_get_objects(request, container_name)
+    # return swift.swift_get_objects(request, container_name)
     except:
         exceptions.handle(request,
-                _('Unable to retrieve objects in %s container' % container_name))
+                          _('Unable to retrieve objects in %s container' % container_name))
         return []
+
 
 def sort_object_list(request, objects):
     def get_key(obj, sort_key):
@@ -138,10 +137,6 @@ def sort_object_list(request, objects):
     object_list = [(obj.id, '%s' % obj.name) for obj in sorted(objects, key=key)]
 
     return object_list
-    # except Exception:
-        # exceptions.handle(request,
-                # _('Unable to sort container objects'))
-        # return []
 
 
 def objects_field_data(request, container_name):
@@ -151,7 +146,6 @@ def objects_field_data(request, container_name):
         return [("", _("Select Object")), ] + objects_list
 
     return [("", _("No objects available")), ]
-
 
 
 def get_simulation_instances(self, simulation_id):

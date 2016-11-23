@@ -1,13 +1,10 @@
 import json
 
-from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
 from horizon import tabs
 from horizon.utils import functions as horizon_utils
-
 from openstack_dashboard.dashboards.ofcloud.instances.tables import ConfigTable
 from openstack_dashboard.dashboards.ofcloud.instances.utils import get_instance_log
 
@@ -29,7 +26,8 @@ class OverviewTab(tabs.Tab):
         instance = self.tab_group.kwargs['instance']
         instance.instance_url = "horizon:project:instances:detail"
 
-        return { "instance": instance }
+        return {"instance": instance}
+
 
 class ConfigTab(tabs.TableTab):
     name = _("Configurations")
@@ -38,7 +36,7 @@ class ConfigTab(tabs.TableTab):
     template_name = "ofcloud/instances/_detail_configurations.html"
     preload = False
 
-    def get_config_data(self,):
+    def get_config_data(self, ):
         instance = self.tab_group.kwargs['instance']
 
         configs = json.loads(instance.config)
@@ -48,7 +46,7 @@ class ConfigTab(tabs.TableTab):
             print(key)
             fileEndIndex = key.rfind('/')
             file = key[0:fileEndIndex]
-            parameter = key[fileEndIndex+1:]
+            parameter = key[fileEndIndex + 1:]
 
             config_rows.append(Config(ix, file, parameter, configs[key]))
 
@@ -78,5 +76,5 @@ class LogTab(tabs.Tab):
 
 class DetailTabs(tabs.TabGroup):
     slug = "instance_details"
-    tabs = (OverviewTab,ConfigTab,LogTab,)
+    tabs = (OverviewTab, ConfigTab, LogTab,)
     sticky = True

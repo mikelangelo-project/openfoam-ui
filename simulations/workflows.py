@@ -1,8 +1,13 @@
+import json
+
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import workflows, forms, exceptions
-from horizon.utils import memoized
+from horizon.utils import memoized, functions
+from openstack_dashboard import api
 from openstack_dashboard.dashboards.ofcloud.simulations import utils
+from openstack_dashboard.dashboards.project.images \
+    import utils as image_utils
 from openstack_dashboard.dashboards.project.instances \
     import utils as instance_utils
 
@@ -31,6 +36,8 @@ class SetAddSimulationDetailsAction(workflows.Action):
 
     class Meta:
         name = _('Details')
+        help_text_template = ("project/instances/"
+                              "_launch_details_help.html")
 
     def __init__(self, request, context, *args, **kwargs):
         self.request = request
@@ -69,6 +76,20 @@ class SetAddSimulationDetailsAction(workflows.Action):
                 ("openfoam.rhoporoussimplefoam", _("rhoporoussimpleFoam")),
                 ("openfoam.rhosimplefoam", _("rhosimpleFoam")),
                 ("openfoam.simplefoam", _("simpleFoam"))]
+
+    def get_help_text(self, extra_context=None):
+        extra = {} if extra_context is None else dict(extra_context)
+        try:
+            extra['usages'] = api.nova.tenant_absolute_limits(self.request)
+            extra['usages_json'] = json.dumps(extra['usages'])
+            flavors = json.dumps([f._info for f in
+                                  instance_utils.flavor_list(self.request)])
+            extra['flavors'] = flavors
+
+        except Exception:
+            exceptions.handle(self.request,
+                              _("Unable to retrieve quota information."))
+        return super(SetAddSimulationDetailsAction, self).get_help_text(extra)
 
 
 class SetAddPSimulationDetails(workflows.Step):

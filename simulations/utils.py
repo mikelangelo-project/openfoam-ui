@@ -43,7 +43,7 @@ def getSimulations(self):
 
         return simulations
     except:
-        exceptions.handle(self.request, _('Unable to get simulations'))
+        exceptions.handle(self.request, _('Unable to get experiments'))
         return []
 
 
@@ -74,7 +74,7 @@ def addSimulation(self, request, context):
     except:
         print "Exception inside utils.addSimulation"
         print traceback.format_exc()
-        exceptions.handle(self.request, _('Unable to add simulation'))
+        exceptions.handle(self.request, _('Unable to add experiment'))
 
         return []
 
@@ -86,7 +86,7 @@ def delete_simulation(self, id):
     except:
         print traceback.format_exc()
         exceptions.handle(self.request,
-                          _('Unable to delete simulationm'))
+                _('Unable to delete experiment.'))
 
         return False
 
@@ -169,5 +169,5 @@ def get_simulation_instances(self, simulation_id):
 
         return instances
     except:
-        exceptions.handle(self.request, _('Unable to get instances for simulation %s' % simulation_id))
+        exceptions.handle(self.request, _('Unable to get instances for experiment %s' % simulation_id))
         return []

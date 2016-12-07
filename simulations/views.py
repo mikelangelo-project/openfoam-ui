@@ -49,7 +49,7 @@ class SimulationsIndexView(tables.DataTableView):
                     simulation.full_flavor = api.nova.flavor_get(
                         self.request, flavor_id)
             except Exception:
-                msg = ('Unable to retrieve flavor "%s" for simulation "%s".'
+                msg = ('Unable to retrieve flavor "%s" for experiment "%s".'
                        % (flavor_id, simulation.id))
                 LOG.info(msg)
 

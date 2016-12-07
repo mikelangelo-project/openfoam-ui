@@ -157,9 +157,9 @@ class Customisation(workflows.Step):
 
 class AddSimulation(workflows.Workflow):
     slug = 'add'
-    name = _('Launch new simulation')
+    name = _('Launch new experiment')
     finalize_button_name = _('Launch')
-    success_message = _('Added simulation "%s".')
+    success_message = _('Added experiment "%s".')
     failure_message = _('Unable to add provider "%s".')
     success_url = 'horizon:ofcloud:simulations:index'
     failure_url = 'horizon:ofcloud:simulations:index'
@@ -169,7 +169,7 @@ class AddSimulation(workflows.Workflow):
         Customisation)
 
     def format_status_message(self, message):
-        return message % self.context.get('simulation_name', 'unknown simulation')
+        return message % self.context.get('simulation_name', 'unknown experiment')
 
     def handle(self, request, context):
         try:
@@ -177,5 +177,5 @@ class AddSimulation(workflows.Workflow):
             return True
         except Exception:
             print traceback.format_exc()
-            exceptions.handle(request, _("Unable to add simulation"))
+            exceptions.handle(request, _("Unable to add experiment"))
             return False

@@ -6,14 +6,14 @@ from openstack_dashboard.dashboards.ofcloud.simulations import utils
 
 class AddTableData(tables.LinkAction):
     name = 'add'
-    verbose_name = _('Add Simulation')
+    verbose_name = _('Add Experiment')
     url = 'horizon:ofcloud:simulations:add'
     classes = ('btn-launch', 'ajax-modal')
 
 
 class DeleteTableData(tables.DeleteAction):
-    data_type_singular = _("Simulation")
-    data_type_plural = _("Simulations")
+    data_type_singular = _("Experiment")
+    data_type_plural = _("Experiments")
 
     def delete(self, request, obj_id):
         utils.delete_simulation(self, obj_id)
@@ -63,6 +63,6 @@ class SimulationTable(tables.DataTable):
 
     class Meta:
         name = 'simulations'
-        verbose_name = _("Simulations")
+        verbose_name = _("Experiments")
         table_actions = (AddTableData, FilterAction,)
         row_actions = (DeleteTableData,)

@@ -17,7 +17,7 @@ from openstack_dashboard.dashboards.ofcloud import dashboard
 
 
 class Simulations(horizon.Panel):
-    name = _("Simulations")
+    name = _("Experiments")
     slug = "simulations"
 
 

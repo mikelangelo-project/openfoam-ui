@@ -3,11 +3,9 @@ import json
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import workflows, forms, exceptions
-from horizon.utils import memoized, functions
+from horizon.utils import memoized
 from openstack_dashboard import api
 from openstack_dashboard.dashboards.ofcloud.simulations import utils
-from openstack_dashboard.dashboards.project.images \
-    import utils as image_utils
 from openstack_dashboard.dashboards.project.instances \
     import utils as instance_utils
 
@@ -33,6 +31,15 @@ class SetAddSimulationDetailsAction(workflows.Action):
     flavor = forms.ChoiceField(
         label=_('Flavor'),
         help_text=_('Flavor'))
+
+    # this field has to be named count, because then it is bound to flavors_and_quotas directive
+    count = forms.IntegerField(
+        label=_('Instances'),
+        required=True,
+        initial=1,
+        min_value=1,
+        help_text=_('Number of instances')
+    )
 
     class Meta:
         name = _('Details')
@@ -94,7 +101,7 @@ class SetAddSimulationDetailsAction(workflows.Action):
 
 class SetAddPSimulationDetails(workflows.Step):
     action_class = SetAddSimulationDetailsAction
-    contributes = ('simulation_name', 'image', 'flavor', 'solver', 'container_name', 'input_data_object')
+    contributes = ('simulation_name', 'image', 'flavor', 'solver', 'container_name', 'input_data_object', 'count')
 
     def contribute(self, data, context):
         if data:
@@ -102,6 +109,7 @@ class SetAddPSimulationDetails(workflows.Step):
             context['image'] = data.get('image', '')
             context['flavor'] = data.get('flavor', '')
             context['solver'] = data.get('solver', '')
+            context['count'] = data.get('count', 1)
 
         return context
 

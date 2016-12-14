@@ -64,6 +64,10 @@ class InstancesTable(tables.DataTable):
         verbose_name=_("IP Address"),
         attrs={'data-type': "ip"}
     )
+    status = tables.Column(
+        'status',
+        verbose_name=_("Status"),
+    )
 
     class Meta:
         name = 'instances'

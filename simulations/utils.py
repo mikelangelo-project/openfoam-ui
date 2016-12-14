@@ -1,5 +1,6 @@
 import logging
 import traceback
+import json
 
 import boto
 import boto.s3.connection
@@ -34,14 +35,14 @@ def getSimulations(self):
         simulations = []
         for sim in r.json():
             simulations.append(Simulation(
-                sim['id'],
-                sim['simulation_name'],
-                sim['image'],
-                sim['flavor'],
-                sim['instance_count'],
-                sim.get('solver', ''),
-                sim['container_name'],
-                sim['input_data_object']))
+                id=sim['id'],
+                simulation_name=sim['simulation_name'],
+                image=sim['image'],
+                flavor=sim['flavor'],
+                solver=sim.get('solver', ''),
+                instance_count=sim['instance_count'],
+                container_name=sim['container_name'],
+                input_data_object=sim['input_data_object']))
 
         return simulations
     except:
@@ -57,21 +58,20 @@ def addSimulation(self, request, context):
         image = context.get('image')
         flavor = context.get('flavor')
         solver = context.get('solver')
+        instance_count = context.get('count')
         container_name = context.get('container_name')
         input_data_object = context.get('input_data_object')
         cases = context.get('cases')
-        instance_count = context.get(
-            'count')  # value on context must be 'count' because of binding with flavors_and_quotas directive
 
         payload = {
             'simulation_name': simulation_name,
             'image': image,
             'flavor': flavor,
             'solver': solver,
+            'instance_count': instance_count,
             'container_name': container_name,
             'input_data_object': input_data_object,
-            'cases': cases,
-            'instance_count': instance_count
+            'cases': json.dumps(cases) if cases else "",
         }
 
         requests.post(ofcloud_url + "/simulations/", json=payload)
@@ -170,7 +170,8 @@ def get_simulation_instances(self, simulation_id):
                 instance['ip'],
                 instance['instance_id'],
                 instance['grafana_url'],
-                instance['download_case_url']))
+                instance['download_case_url'],
+                instance['status']))
 
         return instances
     except:

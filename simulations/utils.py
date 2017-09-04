@@ -1,6 +1,6 @@
+import json
 import logging
 import traceback
-import json
 
 import boto
 import boto.s3.connection
@@ -62,6 +62,7 @@ def addSimulation(self, request, context):
         container_name = context.get('container_name')
         input_data_object = context.get('input_data_object')
         cases = context.get('cases')
+        decomposition = context.get('decomposition')
 
         payload = {
             'simulation_name': simulation_name,
@@ -72,6 +73,7 @@ def addSimulation(self, request, context):
             'container_name': container_name,
             'input_data_object': input_data_object,
             'cases': json.dumps(cases) if cases else "",
+            'decomposition': json.dumps(decomposition) if decomposition else ""
         }
 
         requests.post(ofcloud_url + "/simulations/", json=payload)

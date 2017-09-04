@@ -1,5 +1,7 @@
 import json
+import traceback
 
+from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import workflows, forms, exceptions
@@ -184,6 +186,107 @@ class Customisation(workflows.Step):
         return context
 
 
+class DecompositionAction(workflows.Action):
+    xyz_validator = RegexValidator(regex='^([0-9]+) ([0-9]+) ([0-9]+)$',
+                                   message='Number of subdomains in "x y z" format. Example "2 1 2"')
+
+    subdomains = forms.IntegerField(
+        label=_('Total number of subdomains'),
+        required=False,
+        min_value=1,
+    )
+
+    decomposition_method = forms.ChoiceField(
+        label=_('Decomposition method'),
+        required=False,
+        help_text=_('OpenFOAM decomposition method')
+    )
+
+    n = forms.CharField(
+        label=_('Number of subdomains in x, y, z'),
+        required=False,
+        help_text=_('Number of subdomains in x, y, z'),
+        validators=[xyz_validator]
+    )
+
+    delta = forms.FloatField(
+        label=_('Delta'),
+        required=False,
+        help_text=_('Cell skew factor'),
+        min_value=0
+    )
+
+    order = forms.ChoiceField(
+        label=_('Order'),
+        required=False,
+        help_text=_('Order of decomposition')
+    )
+
+    strategy = forms.CharField(
+        label=_('Strategy'),
+        required=False,
+        help_text=_('Decomposition strategy: optional and complex')
+    )
+
+    processor_weights = forms.CharField(
+        label=_('Processor weights'),
+        required=False,
+        help_text=_(
+            'List of weighting factors for allocation of cells to processors; <wt1> is the weighting factor for '
+            'processor 1, etc. ; weights are normalised so can take any range of values.')
+    )
+
+    datafile = forms.CharField(
+        label=_('Data file'),
+        required=False,
+        help_text=_('Name of file containing data of allocation of cells to processors ')
+    )
+
+    class Meta:
+        name = _('Decomposition method customization')
+
+    def __init__(self, request, context, *args, **kwargs):
+        self.request = request
+        self.context = context
+
+        super(DecompositionAction, self).__init__(
+            request, context, *args, **kwargs)
+
+    def populate_decomposition_method_choices(self, request, context):
+        return [('', _("select"))] + \
+               [('simple', _("Simple")),
+                ('hierarchical', _("Hierarchical")),
+                ('scotch', _("Scotch")),
+                ('manual', _("Manual"))]
+
+    def populate_order_choices(self, request, context):
+        return [('xyz', _('xyz')),
+                ('xzy', _('xzy')),
+                ('yxz', _('yxz')),
+                ('yzx', _('yzx')),
+                ('zxy', _('zxy')),
+                ('zyx', _('zyx'))]
+
+
+class Decomposition(workflows.Step):
+    action_class = DecompositionAction
+    contributes = 'decomposition'
+
+    def contribute(self, data, context):
+        if data:
+            context['decomposition'] = {
+                'subdomains': data.get('subdomains'),
+                'decomposition_method': data.get('decomposition_method'),
+                'n': data.get('n'),
+                'delta': data.get('delta'),
+                'order': data.get('order'),
+                'strategy': data.get('strategy'),
+                'processor_weights': data.get('processor_weights'),
+                'datafile': data.get('datafile')
+            }
+        return context
+
+
 class AddSimulation(workflows.Workflow):
     slug = 'add'
     name = _('Launch new experiment')
@@ -195,7 +298,8 @@ class AddSimulation(workflows.Workflow):
     default_steps = (
         SetAddPSimulationDetails,
         InputData,
-        Customisation)
+        Customisation,
+        Decomposition)
 
     def format_status_message(self, message):
         return message % self.context.get('simulation_name', 'unknown experiment')

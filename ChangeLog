@@ -1,0 +1,12 @@
+CHANGES
+=======
+
+* Fix simulation instantiation, add status field to instance
+* Add instance count field to experiment workflow
+* Add flavor and quota details to experiment workflow
+* Replace "simulation" with "experiment"
+* Add simulation solver selection field to ui
+* Reformat the python code conforming to pep8
+* Update documentation
+* Replace Swift with S3 object store
+* Initial version of OpenFOAM Horizon Dashboard

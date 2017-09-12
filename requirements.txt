@@ -1,0 +1,5 @@
+boto==2.43.0
+Django==1.8.16
+setuptools==20.7.0
+requests==2.12.1
+horizon==2012.2

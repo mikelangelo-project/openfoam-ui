@@ -5,8 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 from horizon import exceptions
 from horizon import tabs
 from horizon.utils import functions as horizon_utils
-from openstack_dashboard.dashboards.ofcloud.instances.tables import ConfigTable
-from openstack_dashboard.dashboards.ofcloud.instances.utils import get_instance_log
+from horizon_openfoam.instances.tables import ConfigTable
+from horizon_openfoam.instances.utils import get_instance_log
 
 
 class Config:
@@ -20,7 +20,7 @@ class Config:
 class OverviewTab(tabs.Tab):
     name = _("Overview")
     slug = "overview"
-    template_name = ("ofcloud/instances/_detail_overview.html")
+    template_name = ("horizon_openfoam/instances/_detail_overview.html")
 
     def get_context_data(self, request):
         instance = self.tab_group.kwargs['instance']
@@ -33,7 +33,7 @@ class ConfigTab(tabs.TableTab):
     name = _("Configurations")
     slug = "configurations"
     table_classes = (ConfigTable,)
-    template_name = "ofcloud/instances/_detail_configurations.html"
+    template_name = "horizon_openfoam/instances/_detail_configurations.html"
     preload = False
 
     def get_config_data(self, ):
@@ -56,7 +56,7 @@ class ConfigTab(tabs.TableTab):
 class LogTab(tabs.Tab):
     name = _('Log')
     slug = 'log'
-    template_name = 'ofcloud/instances/_detail_log.html'
+    template_name = 'horizon_openfoam/instances/_detail_log.html'
     preload = False
 
     def get_context_data(self, request):

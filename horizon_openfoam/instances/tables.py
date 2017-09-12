@@ -52,7 +52,7 @@ class InstancesTable(tables.DataTable):
     )
     name = tables.Column(
         'name',
-        link='horizon:ofcloud:instances:detail',
+        link='horizon:horizon_openfoam:instances:detail',
         verbose_name=_('Instance Name')
     )
     config = tables.Column(

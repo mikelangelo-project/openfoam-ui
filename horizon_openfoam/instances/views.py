@@ -6,18 +6,17 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions, tables, tabs
-from openstack_dashboard.dashboards.ofcloud.instances \
-    import tabs as ofcloud_tabs
-from openstack_dashboard.dashboards.ofcloud.instances import utils
-from openstack_dashboard.dashboards.ofcloud.instances.tables import InstancesTable
-from openstack_dashboard.dashboards.ofcloud.instances.utils import get_instance_log
+from horizon_openfoam.instances import tabs as ofcloud_tabs
+from horizon_openfoam.instances import utils
+from horizon_openfoam.instances.tables import InstancesTable
+from horizon_openfoam.instances.utils import get_instance_log
 
 LOG = logging.getLogger(__name__)
 
 
 class IndexView(tables.DataTableView):
     table_class = InstancesTable
-    template_name = 'ofcloud/instances/index.html'
+    template_name = 'horizon_openfoam/instances/index.html'
 
     def get_data(self):
         instances = utils.get_instances(self)
@@ -26,8 +25,7 @@ class IndexView(tables.DataTableView):
 
 class DetailView(tabs.TabView):
     tab_group_class = ofcloud_tabs.DetailTabs
-    template_name = 'ofcloud/instances/detail.html'
-    # redirect_url = 'horizon:ofcloud:instances:index'
+    template_name = 'horizon_openfoam/instances/detail.html'
     page_title = _("Instance Details: {{ instance.name }}")
 
     def get_context_data(self, **kwargs):

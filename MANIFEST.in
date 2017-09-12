@@ -1,0 +1,6 @@
+include LICENSE
+include README.rst
+recursive-include horizon_openfoam/static *
+recursive-include horizon_openfoam/templates *
+recursive-include horizon_openfoam/simulations/templates *
+recursive-include horizon_openfoam/instances/templates *

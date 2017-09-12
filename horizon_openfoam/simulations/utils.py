@@ -9,7 +9,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import exceptions
-from openstack_dashboard.dashboards.ofcloud.instances.utils import Instance
+from horizon_openfoam.instances.utils import Instance
 
 ofcloud_url = getattr(settings, 'OFCLOUD_API_URL', None)
 

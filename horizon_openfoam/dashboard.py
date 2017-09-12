@@ -13,12 +13,19 @@
 from django.utils.translation import ugettext_lazy as _
 
 import horizon
-from openstack_dashboard.dashboards.ofcloud import dashboard
 
 
-class Simulations(horizon.Panel):
-    name = _("Experiments")
+class Simulations(horizon.PanelGroup):
     slug = "simulations"
+    name = _("Dashboard")
+    panels = ('simulations', 'instances',)
 
 
-dashboard.Ofcloud.register(Simulations)
+class Ofcloud(horizon.Dashboard):
+    name = _("OpenFOAM Cloud")
+    slug = "horizon_openfoam"
+    panels = (Simulations,)  # Add your panels here.
+    default_panel = 'simulations'  # Specify the slug of the dashboard's default panel.
+
+
+horizon.register(Ofcloud)

@@ -3,13 +3,12 @@ import traceback
 
 from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
-
 from horizon import workflows, forms, exceptions
 from horizon.utils import memoized
 from openstack_dashboard import api
-from openstack_dashboard.dashboards.ofcloud.simulations import utils
-from openstack_dashboard.dashboards.project.instances \
-    import utils as instance_utils
+from openstack_dashboard.dashboards.project.instances import utils as instance_utils
+
+from horizon_openfoam.simulations import utils
 
 
 class SetAddSimulationDetailsAction(workflows.Action):
@@ -293,8 +292,8 @@ class AddSimulation(workflows.Workflow):
     finalize_button_name = _('Launch')
     success_message = _('Added experiment "%s".')
     failure_message = _('Unable to add provider "%s".')
-    success_url = 'horizon:ofcloud:simulations:index'
-    failure_url = 'horizon:ofcloud:simulations:index'
+    success_url = 'horizon:horizon_openfoam:simulations:index'
+    failure_url = 'horizon:horizon_openfoam:simulations:index'
     default_steps = (
         SetAddPSimulationDetails,
         InputData,

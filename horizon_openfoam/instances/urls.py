@@ -1,10 +1,10 @@
 from django.conf.urls import patterns
 from django.conf.urls import url
 
-from openstack_dashboard.dashboards.ofcloud.instances import views
+from horizon_openfoam.instances import views
 
 INSTANCES = r'^(?P<instance_id>[^/]+)/%s$'
-VIEW_MOD = 'openstack_dashboard.dashboards.ofcloud.instances.views'
+VIEW_MOD = 'horizon_openfoam.instances.views'
 
 urlpatterns = patterns(
     VIEW_MOD,

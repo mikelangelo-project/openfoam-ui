@@ -1,10 +1,40 @@
 # OpenFOAM Cloud Dashboard
 
-This repository provides a dashboard for the OpenStack Horizon application. To
+This repository provides a horizon dashboard for the OpenFOAM cloud application. To
 use it, you must also install the [backend
 application](https://github.com/mikelangelo-project/openfoam-cloud.git).
 
-## Installing
+## Installing via pip to an existing OpenStack Horizon installation
+
+You can install the horizon-openfoam dashboard via pip package manager:
+    
+    pip install horizon-openfoam
+    
+Edit `openstack_dashboard/local/local_settings.py` and add the following parameters at the end:
+
+    OFCLOUD_API_URL         = 'your_ofcloud_api_url'
+    S3_ACCESS_KEY_ID        = 'your_s3_access_key_id'
+    S3_SECRET_ACCESS_KEY    = 'your_s3_secret_access_key'
+    S3_HOST                 = 's3 host'
+    S3_PORT                 = 443
+    
+The `OFCLOUD_API_URL` is the root URL of the [OpenFOAM Backend](https://github.com/mikelangelo-project/openfoam-cloud.git).
+
+To enable the dashboard copy `_6010_horizon-openfoam.py` to 
+`openstack-dashboard/openstack_dashboard/local/enabled` (usually under `/usr/share`)
+
+After installing restart your apache2 server where horizon is running. 
+    
+Ubuntu/debian:
+    
+    systemctl restart apache2.service
+    
+CentOS:
+    
+    systemctl restart httpd.service 
+
+
+## Installing locally
 
 In order to use the OpenFOAM Horizon dashboard, one must first clone the
 OpenStack's Horizon project and checkout the Liberty version:
@@ -37,9 +67,9 @@ following content:
     DISABLED = False
     
     # A list of applications to be added to INSTALLED_APPS.
-    ADD_INSTALLED_APPS = [ 
+    ADD_INSTALLED_APPS = [
         'openstack_dashboard.dashboards.ofcloud',
-        ] 
+    ]
 
 Finally, edit the local settings file (`horizon/openstack_dashboard/local/local_settings.py`)
 and put the following settings (replace with values appropriate to your

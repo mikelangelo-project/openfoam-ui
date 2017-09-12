@@ -10,17 +10,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.conf.urls import patterns
-from django.conf.urls import url
+from django.utils.translation import ugettext_lazy as _
 
-from openstack_dashboard.dashboards.ofcloud.simulations import views
+import horizon
+from horizon_openfoam import dashboard
 
-VIEW_MOD = 'openstack_dashboard.dashboards.ofcloud.simulations.views'
 
-urlpatterns = patterns(
-    VIEW_MOD,
-    url(r'^$', views.SimulationsIndexView.as_view(), name='index'),
-    url(r'^add$', views.AddSimulationView.as_view(), name='add'),
-    url(r'^(?P<simulation_id>[^/]+)/$',
-        views.DetailView.as_view(), name='detail'),
-)
+class Instances(horizon.Panel):
+    name = _("Instances")
+    slug = "instances"
+
+
+dashboard.Ofcloud.register(Instances)

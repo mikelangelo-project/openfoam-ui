@@ -1,13 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 
 from horizon import tables
-from openstack_dashboard.dashboards.ofcloud.simulations import utils
+from horizon_openfoam.simulations import utils
 
 
 class AddTableData(tables.LinkAction):
     name = 'add'
     verbose_name = _('Add Experiment')
-    url = 'horizon:ofcloud:simulations:add'
+    url = 'horizon:horizon_openfoam:simulations:add'
     classes = ('btn-launch', 'ajax-modal')
 
 
@@ -37,7 +37,7 @@ class SimulationTable(tables.DataTable):
     )
     name = tables.Column(
         'simulation_name',
-        link='horizon:ofcloud:simulations:detail',
+        link='horizon:horizon_openfoam:simulations:detail',
         verbose_name=_('Name')
     )
     solver = tables.Column(

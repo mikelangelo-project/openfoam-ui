@@ -15,17 +15,17 @@ from collections import OrderedDict
 
 from horizon import exceptions, tables, workflows
 from openstack_dashboard import api
-from openstack_dashboard.dashboards.ofcloud.instances.tables import InstancesTable
-from openstack_dashboard.dashboards.ofcloud.simulations import utils
-from openstack_dashboard.dashboards.ofcloud.simulations.tables import SimulationTable
-from openstack_dashboard.dashboards.ofcloud.simulations.workflows import AddSimulation
+from horizon_openfoam.instances.tables import InstancesTable
+from horizon_openfoam.simulations import utils
+from horizon_openfoam.simulations.tables import SimulationTable
+from horizon_openfoam.simulations.workflows import AddSimulation
 
 LOG = logging.getLogger(__name__)
 
 
 class SimulationsIndexView(tables.DataTableView):
     table_class = SimulationTable
-    template_name = 'ofcloud/simulations/index.html'
+    template_name = 'horizon_openfoam/simulations/index.html'
 
     def get_data(self):
         simulations = utils.getSimulations(self)
@@ -58,7 +58,7 @@ class SimulationsIndexView(tables.DataTableView):
 
 class DetailView(tables.DataTableView):
     table_class = InstancesTable
-    template_name = 'ofcloud/simulations/instances.html'
+    template_name = 'horizon_openfoam/simulations/instances.html'
 
     def get_data(self):
         simulation_id = self.kwargs['simulation_id']
